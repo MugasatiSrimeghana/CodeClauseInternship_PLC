@@ -1,5 +1,7 @@
 # CodeClauseInternship_PLC
-# Project Overview
+This Project is done by Mugasati Srimeghana for @CodeClause Internship.
+
+## What is plagiarism detector and project overview
 
 In this project, we will be building a plagiarism detector that examines a text file and performs binary classification; labeling that file as either plagiarized or not, depending on how similar that text file is to a provided source text. Detecting plagiarism is an active area of research; the task is non-trivial and the differences between paraphrased answers and original work are often not so obvious.
 
@@ -7,53 +9,57 @@ One of the ways we might go about detecting plagiarism, is by computing similari
 
 We will be defining a few different similarity features to compare the two texts. Once we have extracted relevant features, we will explore different classification models and decide on a model that gives us the best performance on a test dataset.
 
-# Project Components
-This project will be broken down into three main notebooks:
+## The Dataset
 
-Notebook 1: Data Exploration
+I have prepare a very simple dataset for this tutorial. It contains sample of plagiarized article contents and non-plagiarized — this is derived by the Label 0 for false and 1 for true.
 
-Load in the corpus of plagiarism text data.
-Explore the existing data features and the data distribution.
-This first notebook is not required in your final project submission.
+## 1. Import libraries
 
-Notebook 2: Feature Engineering
+The provided code and libraries facilitate the development and evaluation of a plagiarism detection model. It begins by downloading essential Natural Language Toolkit (NLTK) resources, enabling access to valuable linguistic datasets and models. Next, the code imports several crucial libraries.
 
-Clean and pre-process the text data.
-Define features for comparing the similarity of an answer text and a source text, and extract similarity features.
-Select "good" features, by analyzing the correlations between different features.
-Create train/test .csv files that hold the relevant features and class labels for train/test data points.
-Notebook 3: Train and Deploy Your Model in SageMaker
+From scikit-learn, the code imports the cosine_similarity function, which calculates the similarity between vectors and is useful for comparing documents. Additionally, Pandas (import pandas as pd) is imported for efficient data manipulation and analysis.
 
-Upload your train/test feature data to S3.
-Define a binary classification model and a training script.
-Train your model and deploy it using SageMaker.
-Evaluate your deployed classifier.
+The code employs the string module for handling string operations, especially text preprocessing, and imports the stopwords corpus from NLTK. This corpus contains common words frequently removed during text preprocessing.
 
-# Installation
-We will be using the below AWS platform services along with Data Processing & Machine Learning Libraries to implement the project.
+To save and load Python objects, including machine learning models, joblib is imported. For classification tasks, like plagiarism detection, the code imports the LogisticRegression class from scikit-learn.
 
-Amazon SageMaker service.
-Amazon S3 service
-Amazon IAM service
-Data Processing & Machine Learning Libraries: NumPy, Pandas, Scikit-Learn
-The code should run with no issues using Python versions 3.*
+For dataset splitting during model evaluation, train_test_split is imported. Finally, the code brings in evaluation metrics, such as accuracy_score and classification_report, for assessing model performance.
 
-# File Descriptions
-There is one folder and other files:
+Lastly, the TfidfVectorizer class from scikit-learn is imported, offering TF-IDF-based text feature extraction—an essential technique in text classification and information retrieval tasks.
 
-source_sklearn
-train.py: It is the training script which will be executed when the model is trained and it contains the necessary code to train our model.
+## 2. Load CSV
 
-1_Data_Exploration.ipynb - It is a jupyter notebook which contains the necessary code to explore the plagiarism data.
+## 3. Cleanup Dataset
 
-2_Plagiarism_Feature_Engineering.ipynb - It is a jupyter notebook which contains the necessary code for feature engineering.
+The code defines a text preprocessing function that:
+- Removes punctuation.
+- Converts text to lowercase.
+- Eliminates common English stopwords (e.g., “the,” “and”).
+It then applies this preprocessing to two text columns in a dataset. The goal is to clean and standardize the text for further analysis or modeling, such as plagiarism detection.
 
-3_Training_a_Model.ipynb - It is a jupyter notebook which contains the necessary code to create, train and deploy the model in SageMaker.
+## 4. Vectorization
 
-helpers.py: It is the script which contains all the helper functions used during the entire project.
+Next we use the TF-IDF vectorization technique to convert text data from two columns into a numerical format. It combines the text from “source_text” and “plagiarized_text” columns, calculates the TF-IDF values for each word, and stores these values in a feature matrix called “X.” This transformation is essential for preparing the text data for machine learning models.
 
-problem_unittests.py: It is the script which contains all the unit tests used during the entire project.
+TF-IDF stands for Term Frequency-Inverse Document Frequency, and it is a numerical statistic used in natural language processing and information retrieval to evaluate the importance of a word within a document relative to a collection of documents (corpus). TF-IDF is a commonly used technique for text data preprocessing and feature extraction.  
 
-# Instructions
+## 5. Logistic Regression & Training
 
-The plagiarism detection project which we will be working on is intended to be done using Amazon's SageMaker platform. In particular, it is assumed that we have a working notebook instance in which we can clone the plagiarism detection repository. We will clone the https://github.com/udacity/ML_SageMaker_Studies repository and then work on the project.
+Creates a logistic regression model, and model.fit(X, y) trains the model using the features X and the target variable y. This is where we do the training the most.
+
+Data Splitting: It divides the dataset into two subsets: a training set (used for model training) and a testing set (used for model evaluation). The split is 80% for training and 20% for testing.
+
+Model Prediction: It applies a machine learning model to the testing set to make predictions based on the model’s learned patterns.
+
+Accuracy Calculation: The code calculates the accuracy of the model’s predictions by comparing them to the true labels in the testing set. Accuracy quantifies how often the model’s predictions match the actual outcomes.
+
+Classification Report: A detailed classification report is generated, which includes precision (accuracy of positive predictions), recall (proportion of actual positives correctly predicted), F1-score (harmonic mean of precision and recall), and support (the number of occurrences of each class).
+
+## 6. Saving the Model
+
+Save the model so we can use it later on as we like.
+
+Overall, this workflow allows us to gauge the model’s effectiveness in classifying data, providing valuable information for decision-making and further model refinement. The accuracy score provides a high-level summary of performance, while the classification report offers a nuanced assessment of the model’s strengths and weaknesses, making it a valuable tool for evaluating classification models.
+
+
+
