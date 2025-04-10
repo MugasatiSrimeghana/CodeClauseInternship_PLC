@@ -1,5 +1,5 @@
-# CodeClauseInternship_PLC
-This Project is done by Mugasati Srimeghana for @CodeClause Internship.
+# Plagerism Detector
+This Project is done by Mugasati Srimeghana.
 
 ## What is plagiarism detector and project overview
 
